@@ -1,0 +1,152 @@
+import cv2
+import numpy as numpy
+import imutils
+import math
+from math import atan2, sin, cos
+import time
+from Parkour import Parkour
+
+class State():
+    def __init__(self, x_, y_, theta_):
+        self.x = x_
+        self.y = y_
+        self.theta = theta_
+    
+class Controller():
+    def __init__(self, start_, goal_, R_ = 0.0325, L_ = 0.1, kP = 1.0, kI = 0.1, kD = 0.1, dT = 0.1, v=1.0):
+        self.current = start_
+        self.goal = goal_
+        self.R = R_ #in meter
+        self.L = L_ #in meter
+
+        self.E = 0  #Cummulative error
+        self.old_e = 0 # Previous error
+
+        self.Kp = kP
+        self.Ki = kI
+        self.Kd = kD
+
+        self.desiredV = v
+        self.dt = dT #in second
+        return
+
+    
+    def uniToDiff(self, v, w):
+        vR = (2*v + w*self.L)/(2*self.R)
+        vL = (2*v - w*self.L)/(2*self.R)
+        return vR, vL
+
+    
+    def diffToUni(self, vR, vL):
+        v = self.R/2*(vR+vL)
+        w = self.R/self.L*(vR-vL)
+        return v, w
+    
+
+    def iteratePID(self):
+        #Difference in x and y
+        d_x = self.goal.x - self.current.x
+        d_y = self.goal.y - self.current.y
+
+        #Angle from robot to goal
+        g_theta = atan2(d_y, d_x)
+
+        #Error between the goal angle and robot angle
+        alpha = g_theta - self.current.theta
+        e = atan2(sin(alpha), cos(alpha))
+
+        e_P = e
+        e_I = self.E + e
+        e_D = e - self.old_e
+
+        # This PID controller only calculates the angular velocity with constant speed of v
+        # The value of v can be specified by giving in parameter or using the pre-defined value defined above.
+        w = self.Kp*e_P + self.Ki*e_I + self.Kd*e_D
+
+
+        w = atan2(sin(w), cos(w))
+
+        self.E = self.E + e
+        self.old_e = e
+        v = self.desiredV
+
+        return v, w
+
+    def fixAngle(self, angle):
+        return atan2(sin(angle), cos(angle))
+        
+
+    def makeAction(self, v, w):
+        x_dt = v*cos(self.current.theta)
+        y_dt = v*sin(self.current.theta)
+        theta_dt = w
+
+        self.current.x = self.current.x + x_dt * self.dt
+        self.current.y = self.current.y + y_dt * self.dt
+        self.current.theta = self.fixAngle(self.current.theta + self.fixAngle(theta_dt * self.dt))
+        return
+    
+
+    def isArrived(self):
+        if abs(self.current.x - self.goal.x) < 0.5 and abs(self.current.y - self.goal.y) < 0.5:
+            return True
+        else:
+            return False
+        
+    def runPID(self, parkour=None):
+        x = [self.current.x]
+        y = [self.current.y]
+        theta = [self.current.theta]
+        while(not self.isArrived()):
+            v, w = self.iteratePID()
+            self.makeAction(v, w)
+            x.append(self.current.x)
+            y.append(self.current.y)
+            theta.append(self.current.theta)
+            if parkour:
+
+                parkour.drawPlot(x, y, theta)
+            #time.sleep(self.dt)
+
+            # Print or plot some things in here
+            # Also it can be needed to add some max iteration for error situations and make the code stable.
+            #print(self.current.x, self.current.y, self.current.theta)
+        return x, y, theta
+
+
+def trackRoute(start, targets):
+    current = start
+    x = []
+    y = []
+    theta = []
+    for target in targets:
+        controller = Controller(current, target)
+        x_, y_, theta_ = controller.runPID()
+        x.extend(x_)
+        y.extend(y_)
+        theta.extend(theta_)
+        current = controller.current
+    return x, y, theta
+
+
+#Starting point of the code
+def main():
+    # Define dt time, create controller, define start and goal points
+    # In every iteration, get an action from PID and make the action,
+    # after that, sleep for dt. Repeat that loop until reaching the goal state.
+    
+    start = State(-20, 15, math.radians(90))
+    targets = [State(0, 20, 0),  State(20, 10, 0), State(0, 5, 0), State(-10, -15, 0), State(0, -10, 0), State(8, -10, 0) ]
+    
+    
+    x, y, theta = trackRoute(start, targets)
+    
+    parkour = Parkour()
+    parkour.drawPlot(x, y, theta, show=True)
+
+
+
+
+
+if __name__ == "__main__":
+    main()
