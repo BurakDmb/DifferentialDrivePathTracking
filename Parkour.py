@@ -1,12 +1,7 @@
 import numpy as np
-import cv2
 import matplotlib.pyplot as plt
-import numpy as np
 from scipy import ndimage
 import math
-import matplotlib 
-import matplotlib.animation as animation
-matplotlib.use('TkAgg')
 
 class Parkour():
     def __init__(self):

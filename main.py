@@ -1,6 +1,3 @@
-import cv2
-import numpy as numpy
-import imutils
 import math
 from math import atan2, sin, cos
 import time
@@ -11,6 +8,9 @@ class State():
         self.x = x_
         self.y = y_
         self.theta = theta_
+
+    def __str__(self):
+        return str(self.x)+","+str(self.y)+","+str(self.theta)
     
 class Controller():
     def __init__(self, start_, goal_, R_ = 0.0325, L_ = 0.1, kP = 1.0, kI = 0.1, kD = 0.1, dT = 0.1, v=1.0):
@@ -135,9 +135,8 @@ def main():
     # In every iteration, get an action from PID and make the action,
     # after that, sleep for dt. Repeat that loop until reaching the goal state.
     
-    start = State(-20, 15, math.radians(90))
+    start = State(-20.0, 15.0, math.radians(90))
     targets = [State(0, 20, 0),  State(20, 10, 0), State(0, 5, 0), State(-10, -15, 0), State(0, -10, 0), State(8, -10, 0) ]
-    
     
     x, y, theta = trackRoute(start, targets)
     
