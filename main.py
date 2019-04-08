@@ -1,7 +1,7 @@
-import math
-from math import atan2, sin, cos
+
+from math import atan2, sin, cos, radians
 import time
-from Parkour import Parkour
+
 
 class State():
     def __init__(self, x_, y_, theta_):
@@ -137,11 +137,13 @@ def main():
     
     start = State(-20.0, 15.0, math.radians(90))
     targets = [State(0, 20, 0),  State(20, 10, 0), State(0, 5, 0), State(-10, -15, 0), State(0, -10, 0), State(8, -10, 0) ]
+    if simulateParkour:
+        from Parkour import Parkour
+
+        x, y, theta = trackRoute(start, targets)
     
-    x, y, theta = trackRoute(start, targets)
-    
-    parkour = Parkour()
-    parkour.drawPlot(x, y, theta, show=True)
+        parkour = Parkour()
+        parkour.drawPlot(x, y, theta, show=True)
 
 
 
