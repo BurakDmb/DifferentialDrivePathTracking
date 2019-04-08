@@ -5,9 +5,14 @@ import time
 
 class State():
     def __init__(self, x_, y_, theta_):
-        self.x = x_
-        self.y = y_
-        self.theta = theta_
+        if x_ and y_ and theta_:
+            self.x = x_
+            self.y = y_
+            self.theta = theta_
+        else:
+            self.x = 0
+            self.y = 0
+            self.theta = 0
 
     def __str__(self):
         return str(self.x)+","+str(self.y)+","+str(self.theta)
