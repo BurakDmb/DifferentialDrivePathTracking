@@ -5,7 +5,7 @@ import time
 
 class State():
     def __init__(self, x_, y_, theta_):
-        if x_ and y_ and theta_:
+        if not (x_ == None or y_ == None or theta_ == None):
             self.x = x_
             self.y = y_
             self.theta = theta_
