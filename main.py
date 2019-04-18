@@ -1,4 +1,4 @@
-
+import math
 from math import atan2, sin, cos, radians
 import time
 
@@ -57,7 +57,8 @@ class Controller():
         g_theta = atan2(d_y, d_x)
 
         #Error between the goal angle and robot angle
-        alpha = g_theta - self.current.theta
+        #alpha = g_theta - self.current.theta
+        alpha = g_theta 
         e = atan2(sin(alpha), cos(alpha))
 
         e_P = e
