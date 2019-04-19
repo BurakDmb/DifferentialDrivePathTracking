@@ -18,7 +18,7 @@ class State():
         return str(self.x)+","+str(self.y)+","+str(self.theta)
     
 class Controller():
-    def __init__(self, start_, goal_, R_ = 0.0325, L_ = 0.1, kP = 0.5, kI = 0.5, kD = 0.5, dT = 0.1, v=1.0):
+    def __init__(self, start_, goal_, R_ = 0.0325, L_ = 0.1, kP = 1, kI = 0.1, kD = 0.1, dT = 0.1, v=1.0):
         self.current = start_
         self.goal = goal_
         self.R = R_ #in meter
