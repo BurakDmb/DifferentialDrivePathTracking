@@ -93,7 +93,9 @@ class Controller():
         return
     
 
-    def isArrived(self, goal=self.goal):
+    def isArrived(self, goal=None):
+        if goal is None:
+            goal = self.goal
         print("Arrive check:",str(abs(self.current.x - goal.x)), str(abs(self.current.y - goal.y)))
         if abs(self.current.x - goal.x) < 25.0 and abs(self.current.y - goal.y) < 25.0 or\
              (abs(self.current.x - goal.x) + abs(self.current.y - goal.y)< 25):
