@@ -59,8 +59,8 @@ class Controller():
         #Error between the goal angle and robot angle
         #alpha = g_theta - self.current.theta
         alpha = g_theta 
-        #e = atan2(sin(alpha), cos(alpha))
-        e = d_x+d_y
+        e = atan2(sin(alpha), cos(alpha))
+        
 
         e_P = e
         e_I = self.E + e
