@@ -18,7 +18,7 @@ class State():
         return str(self.x)+","+str(self.y)+","+str(self.theta)
     
 class Controller():
-    def __init__(self, start_, goal_, R_ = 0.0325, L_ = 0.1, kP = 1.0, kI = 0.1, kD = 0.1, dT = 0.1, v=1.0):
+    def __init__(self, start_, goal_, R_ = 0.0325, L_ = 0.1, kP = 1.0, kI = 1.0, kD = 0.1, dT = 0.1, v=1.0):
         self.current = start_
         self.goal = goal_
         self.R = R_ #in meter
@@ -59,7 +59,8 @@ class Controller():
         #Error between the goal angle and robot angle
         #alpha = g_theta - self.current.theta
         alpha = g_theta 
-        e = atan2(sin(alpha), cos(alpha))
+        #e = atan2(sin(alpha), cos(alpha))
+        e = d_x+d_y
 
         e_P = e
         e_I = self.E + e
