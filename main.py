@@ -68,7 +68,7 @@ class Controller():
 
         # This PID controller only calculates the angular velocity with constant speed of v
         # The value of v can be specified by giving in parameter or using the pre-defined value defined above.
-        w = self.Kp*e_P + self.Ki*e_I + self.Kd*e_D - (math.pi/2)
+        w = self.Kp*e_P + self.Ki*e_I + self.Kd*e_D
 
         w = atan2(sin(w), cos(w))
 
