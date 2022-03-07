@@ -8,7 +8,7 @@
 
 Here you can see an example simulation for:
 ```
-start = State(-20, 15, math.radians(90))
+start = State(-20, 15, np.radians(90))
 targets = [State(0, 20, 0), State(20, 10, 0), State(0, 5, 0), State(-10, -15, 0), State(0, -10, 0), State(8, -10, 0)]
 ```
 
