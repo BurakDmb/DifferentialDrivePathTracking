@@ -1,0 +1,2 @@
+from write_to_arduino import write_to_arduino
+write_to_arduino(30,30)
